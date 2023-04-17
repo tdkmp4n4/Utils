@@ -1,0 +1,10 @@
+$action = New-ScheduledTaskAction -Execute cmd.exe -Argument "/c ping 8.8.8.8"
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date)
+$principal = New-ScheduledTaskPrincipal -UserID "domain\user" -RunLevel Highest
+$settings = New-ScheduledTaskSettingsSet -MultipleInstances Parallel
+
+Register-ScheduledTask -TaskName "TaskName" -Action $action -Trigger $trigger -Settings $settings -Principal $principal
+
+schtasks /Run /TN "TaskName"
+
+Unregister-ScheduledTask -TaskName "TaskName" -Confirm:$false
